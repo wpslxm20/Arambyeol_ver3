@@ -1,0 +1,31 @@
+name: "🛠 Refactoring"
+description: "코드 품질 개선 또는 구조 변경"
+labels: ["refactor"]
+body:
+  - type: textarea
+    attributes:
+      label: 🔍 리팩토링 대상
+      description: 리팩토링이 필요한 모듈, 클래스, 함수 등을 명시해 주세요.
+      placeholder: 예: UserService 클래스의 메서드 분리
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 🎯 리팩토링 목적
+      description: 코드 구조 개선, 중복 제거, 성능 최적화 등 목적을 작성해 주세요.
+      placeholder: 예: 코드 가독성 향상 및 유지보수성 강화
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 📝 변경 범위
+      description: 어떤 부분이 변경되는지, 영향 범위를 작성해 주세요.
+      placeholder: 예: UserService와 AuthService 관련 로직 변경
+
+  - type: textarea
+    attributes:
+      label: ✅ 기대 효과
+      description: 리팩토링 후 기대되는 이점을 작성해 주세요.
+      placeholder: 예: 코드 복잡도 감소, 성능 향상

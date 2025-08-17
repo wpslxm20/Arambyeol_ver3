@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.arambyeol_ver3"
+    namespace = "com.arambyeol.arambyeol_ver3"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.arambyeol_ver3"
+        applicationId = "com.arambyeol.arambyeol_ver3"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":presentation"))
+    implementation(project(":feature:todaymeal"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

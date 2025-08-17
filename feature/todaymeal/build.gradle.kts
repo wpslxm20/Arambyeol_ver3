@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.arambyeol.data"
+    namespace = "com.arambyeol.todaymeal"
     compileSdk = 35
 
     defaultConfig {
@@ -40,4 +40,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
 }

@@ -1,4 +1,4 @@
-package com.example.todaymeal
+package com.arambyeol.todaymeal
 
 import org.junit.Test
 

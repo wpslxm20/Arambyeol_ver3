@@ -1,4 +1,4 @@
-package com.arambyeol.presentation.ui.theme
+package com.arambyeol.arambyeol_ver3.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

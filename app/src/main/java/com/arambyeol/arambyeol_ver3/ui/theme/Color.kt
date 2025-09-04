@@ -1,4 +1,4 @@
-package com.arambyeol.presentation.ui.theme
+package com.arambyeol.arambyeol_ver3.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -11,3 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val TransparentYellow = Color(0x36FFD966)
+val DarkYellow = Color(0xFFE09D39)
+
+val Gray01 = Color(0xFF33363F)

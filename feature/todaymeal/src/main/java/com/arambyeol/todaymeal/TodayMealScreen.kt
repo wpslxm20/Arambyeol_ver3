@@ -7,16 +7,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+
+fun NavGraphBuilder.todayMealGraph(navController: NavController) {
+    composable("today_meal_screen") {
+        val viewModel: TodayMealViewModel = hiltViewModel()
+        TodayMealScreen(viewModel)
+    }
+}
 
 @Composable
 fun TodayMealScreen(
-    viewModel: TodayMealViewModel = hiltViewModel()
+    viewModel: TodayMealViewModel
 ) {
     val meals = viewModel.todayMeals.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadMeals("2025-08-14")
-    }
+//    LaunchedEffect(true) {
+//        viewModel.loadMeals("2025-08-14")
+//    }
 
-    print(meals.value)
+    Text("오늘의 식단")
 }

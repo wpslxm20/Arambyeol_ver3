@@ -82,10 +82,12 @@ fun AppNavHostWithTopTabBar() {
                 }
             )
         }
+
+        // 그림자
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(10.dp) // 그림자 높이
+                .height(10.dp)
                 .align(Alignment.CenterHorizontally)
                 .background(
                     brush = Brush.verticalGradient(

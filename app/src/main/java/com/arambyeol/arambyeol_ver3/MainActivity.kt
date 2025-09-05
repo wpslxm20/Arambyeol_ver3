@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.arambyeol.arambyeol_ver3.ui.theme.Arambyeol_ver3Theme
-import com.arambyeol.arambyeol_ver3.ui.theme.TransparentYellow
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.example.ui.theme.TransparentYellow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

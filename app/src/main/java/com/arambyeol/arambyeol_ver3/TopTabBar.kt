@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arambyeol.arambyeol_ver3.ui.theme.DarkYellow
-import com.arambyeol.arambyeol_ver3.ui.theme.Gray01
+import com.example.ui.theme.DarkYellow
+import com.example.ui.theme.Gray01
 
 @Composable
 fun TopTabBar(

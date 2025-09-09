@@ -32,8 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.ui.theme.TransparentYellow
-import com.example.ui.R
+import com.arambyeol.ui.theme.TransparentYellow
+import com.arambyeol.core.ui.R
 
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     composable("today_meal_screen") {

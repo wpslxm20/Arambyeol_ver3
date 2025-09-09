@@ -25,10 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.example.ui.theme.TransparentYellow
+import com.arambyeol.ui.theme.TransparentYellow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

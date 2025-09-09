@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ui"
+    namespace = "com.arambyeol.core.ui"
     compileSdk = 35
 
     defaultConfig {

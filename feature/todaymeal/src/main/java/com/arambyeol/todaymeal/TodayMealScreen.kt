@@ -1,7 +1,5 @@
 package com.arambyeol.todaymeal
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -28,12 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.arambyeol.ui.theme.TransparentYellow
 import com.arambyeol.core.ui.R
+import com.arambyeol.domain.entity.MealType
+import com.arambyeol.ui.component.DailyMealCard
 
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     composable("today_meal_screen") {
@@ -48,11 +46,17 @@ fun TodayMealScreen(
 ) {
     val meals = viewModel.todayMeals.collectAsState()
 
-//    LaunchedEffect(true) {
-//        viewModel.loadMeals("2025-08-14")
-//    }
+    LaunchedEffect(true) {
+        viewModel.loadDummyMeals()
+    }
 
-    TodayDateBox(viewModel.getTodayFormatted())
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        TodayDateBox(viewModel.getTodayFormatted())
+        DailyMealCard(meals, MealType.BREAKFAST)
+    }
 }
 
 @Composable

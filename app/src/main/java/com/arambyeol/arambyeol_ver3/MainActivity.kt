@@ -62,7 +62,6 @@ fun AppNavHostWithTopTabBar() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = TransparentYellow),
         ) {
             AppHeader()
             TopTabBar(
@@ -80,23 +79,6 @@ fun AppNavHostWithTopTabBar() {
                 }
             )
         }
-
-        // 그림자
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(10.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(alpha = 0.04f), // 위쪽 진한 그림자
-                            Color.Transparent                // 아래쪽 투명
-                        )
-                    )
-                )
-        )
-
         // 실제 화면 NavHost
         AppNavHost(navController)
     }

@@ -47,7 +47,8 @@ fun TodayMealScreen(
     val meals = viewModel.todayMeals.collectAsState()
 
     LaunchedEffect(true) {
-        viewModel.loadDummyMeals()
+//        viewModel.loadDummyMeals()
+        viewModel.loadTodayMeals()
     }
 
     Column(
@@ -83,18 +84,7 @@ fun TodayDateBox(date: String) {
                 .padding(end = 3.dp, bottom = 5.dp)
                 .background(
                     color = Color.White,
-                    shape = RoundedCornerShape(15.dp)
-                )
-        )
-
-        // 실제 박스 (배경 + 모서리)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(end = 3.dp, bottom = 5.dp)
-                .background(
-                    color = TransparentYellow,
-                    shape = RoundedCornerShape(15.dp)
+                    shape = RoundedCornerShape(15.dp),
                 )
         )
 

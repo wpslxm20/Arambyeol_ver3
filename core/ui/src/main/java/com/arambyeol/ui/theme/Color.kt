@@ -3,6 +3,7 @@ package com.arambyeol.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val TransparentYellow = Color(0x36FFD966)
+val LightYellow = Color(0xFFF2D5AA)
 val DarkYellow = Color(0xFFE09D39)
 val DarkGreen = Color(0xFF0AAF9E)
 val DarkRed = Color(0xFFD4757A)

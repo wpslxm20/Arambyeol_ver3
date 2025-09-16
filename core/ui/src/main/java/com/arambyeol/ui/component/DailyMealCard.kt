@@ -1,7 +1,9 @@
 package com.arambyeol.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,10 +23,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,11 +43,10 @@ import com.arambyeol.domain.entity.Menu
 import com.arambyeol.ui.theme.DarkGreen
 import com.arambyeol.ui.theme.DarkRed
 import com.arambyeol.ui.theme.DarkYellow
-import com.arambyeol.ui.theme.Gray01
 import com.arambyeol.ui.theme.Gray03
+import com.arambyeol.ui.theme.Gray04
 import com.arambyeol.ui.theme.Gray05
-
-val orderedMealTypes = listOf(MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER)
+import com.arambyeol.ui.theme.LightYellow
 
 @Composable
 fun DailyMealCard(meals: State<Meal?>, mealTime: MealType) {
@@ -45,94 +54,140 @@ fun DailyMealCard(meals: State<Meal?>, mealTime: MealType) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp)
-                .verticalScroll(rememberScrollState())
         ) {
-            orderedMealTypes.forEach { type ->
-                val isColor = type == mealTime
-                meal.menusByMealType[type]?.let { menus ->
-                    if (menus.isNotEmpty()) {
-                        MealTimeTitle(type)
-                        Row(
-                            modifier = Modifier
-                                .padding(bottom = 29.dp)
-                                .horizontalScroll(rememberScrollState())
-                        ) {
-                            menus.groupBy { it.course }
-                                .toList()
-                                .forEachIndexed { index, (course, courseMenus) ->
-                                CourseCard(course, courseMenus, isColor, index)
-                            }
+            var selectedMeal by remember { mutableStateOf(mealTime) }
+            MealTimeTabs(
+                selectedMeal = selectedMeal,
+                onMealSelected = { meal ->
+                    selectedMeal = meal
+                }
+            )
+
+            meal.menusByMealType[selectedMeal]?.let { menus ->
+                if (menus.isNotEmpty()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .padding(start = 30.dp, top = 5.dp, end = 30.dp)
+                            .height(480.dp)
+                    ) {
+                        items( menus.groupBy { it.course }.toList()) { (course, courseMenus) ->
+                            CourseCard(course, courseMenus)
                         }
                     }
                 }
+            }
+
+            CurrentOperatingHourText(selectedMeal)
+        }
+    }
+}
+
+@Composable
+fun MealTimeTabs(
+    selectedMeal: MealType,
+    onMealSelected: (MealType) -> Unit
+) {
+    val items = listOf(
+        Triple(MealType.BREAKFAST, "아침", R.drawable.ic_morning),
+        Triple(MealType.LUNCH, "점심", R.drawable.ic_lunch),
+        Triple(MealType.DINNER, "저녁", R.drawable.ic_dinner)
+    )
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 70.dp)
+    ) {
+        items.forEach { (mealType, title, iconRes) ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() }, // ripple 효과 제거
+                        indication = null
+                    ) { onMealSelected(mealType) }
+            ) {
+                // 선택된 탭이면 아이콘 표시
+                if (mealType == selectedMeal) {
+                    Icon(
+                        painter = painterResource(id = iconRes), // 원하는 아이콘
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(end = 4.dp)
+                    )
+                }
+
+                Text(
+                    text = title,
+                    fontSize = 17.sp,
+                    fontWeight = if (mealType == selectedMeal) FontWeight.Bold else FontWeight.Normal,
+                    color = if (mealType == selectedMeal) Color.Black else Color.Gray
+                )
             }
         }
     }
 }
 
 @Composable
-fun MealTimeTitle(mealTime: MealType) {
-    val (title, iconRes) = when (mealTime) {
-        MealType.BREAKFAST -> "아침" to R.drawable.ic_morning
-        MealType.LUNCH -> "점심" to R.drawable.ic_lunch
-        MealType.DINNER -> "저녁" to R.drawable.ic_dinner
+fun CurrentOperatingHourText(mealTime: MealType) {
+    val openHour = when (mealTime) {
+        MealType.BREAKFAST -> "평일 07:30~09:00 테이크아웃 08:30 - 09:30\n" + "주말/공휴일 8:00~9:00"
+        MealType.LUNCH -> "평일 11:30~13:00\n" +
+                "주말/공휴일 12:00~13:30"
+        MealType.DINNER -> "평일 17:30~19:00\n" + "주말/공휴일 17:30~18:40"
     }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Text(
+        text = openHour,
+        color = Gray04,
+        fontSize = 13.sp,
         modifier = Modifier
-            .padding(bottom = 14.dp)
-    ) {
-        Icon(
-            painter = painterResource(iconRes),
-            contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .padding(end = 7.dp)
-        )
-        Text(
-            text = title,
-            color = Gray01,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(end = 3.dp)
-        )
-    }
+            .padding(start = 34.dp, top = 15.dp, bottom = 20.dp),
+        lineHeight = 20.sp
+    )
 }
 
 @Composable
-fun CourseCard(course: String, menus: List<Menu>, isColor: Boolean, index: Int) {
-    val colorSet = listOf(DarkYellow, DarkGreen, DarkRed)
-    val backgroundColor = if (isColor) colorSet[index%3].copy(alpha = (255f / 10) / 255f) else Gray05
-    val textColor = if (isColor) colorSet[index%3] else Gray03
+fun CourseCard(course: String, menus: List<Menu>) {
     Column(
         modifier = Modifier
     ) {
         Box(
             modifier = Modifier
-                .width(220.dp)
-                .height(140.dp)
-                .padding(end = 17.dp)
-                .background(backgroundColor, shape = RoundedCornerShape(16.dp))
+                .width(163.dp)
+                .height(230.dp)
+                .border(
+                    width = 1.dp,
+                    color = LightYellow,
+                    shape = RoundedCornerShape(16.dp)
+                )
         ) {
             Column(
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(vertical = 15.dp, horizontal = 21.dp)
             ) {
-                CourseTitle(course, textColor)
-                Box(
+                CourseTitle(course, DarkYellow)
+                Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
+                        .padding(start = 2.dp)
                 ) {
-                    Text(
-                        text = menus.joinToString(", ") { it.menuName },
-                        fontSize = 14.sp,
-                        color = Color.Black,
-                        overflow = TextOverflow.Ellipsis,
-                        lineHeight = 20.sp
-                    )
+                    menus.forEach { menu ->
+                        Text(
+                            text = menu.menuName,
+                            fontSize = 14.sp,
+                            color = Color.Black,
+                            overflow = TextOverflow.Ellipsis,
+                            lineHeight = 20.sp
+                        )
+                    }
                 }
             }
 

@@ -47,7 +47,6 @@ fun TodayMealScreen(
     val meals = viewModel.todayMeals.collectAsState()
 
     LaunchedEffect(true) {
-//        viewModel.loadDummyMeals()
         viewModel.loadTodayMeals()
     }
 

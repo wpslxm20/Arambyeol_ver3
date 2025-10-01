@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arambyeol.arambyeol_ver3.ui.theme.DarkYellow
-import com.arambyeol.arambyeol_ver3.ui.theme.Gray01
+import com.arambyeol.ui.theme.DarkYellow
+import com.arambyeol.ui.theme.Gray02
 
 @Composable
 fun TopTabBar(
@@ -35,7 +35,7 @@ fun TopTabBar(
                 text = tab.title,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) Color.White else Gray01,
+                color = if (isSelected) Color.White else Gray02,
                 modifier = Modifier
                     .background(
                         color = if (isSelected) DarkYellow else Color.Transparent,

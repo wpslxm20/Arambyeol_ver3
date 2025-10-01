@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="today_meal">오늘의 식단</string>
+    <string name="all_operating_hour">평일 조식 7:30~9:00 테이크아웃 8:30~9:30 중식 11:30~13:30 석식 17:30~19:00\n
+주말/공휴일 조식 8:00~9:00 중식 12:00~13:30 석식 17:30~18:40</string>
+    <string name="operation_hour_label">운영 시간</string>
+</resources>

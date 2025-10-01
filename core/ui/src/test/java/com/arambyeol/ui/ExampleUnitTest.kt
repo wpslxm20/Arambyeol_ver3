@@ -1,4 +1,4 @@
-package com.example.ui
+package com.arambyeol.ui
 
 import org.junit.Test
 

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.arambyeol.arambyeol_ver3.ui.theme.Arambyeol_ver3Theme
-import com.arambyeol.arambyeol_ver3.ui.theme.TransparentYellow
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,9 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.arambyeol.ui.theme.TransparentYellow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +46,6 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     ) {
                         AppNavHostWithTopTabBar()
-//                      TodayMealScreen()
                     }
                 }
             }
@@ -64,7 +62,6 @@ fun AppNavHostWithTopTabBar() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = TransparentYellow),
         ) {
             AppHeader()
             TopTabBar(
@@ -82,23 +79,6 @@ fun AppNavHostWithTopTabBar() {
                 }
             )
         }
-
-        // 그림자
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(10.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(alpha = 0.04f), // 위쪽 진한 그림자
-                            Color.Transparent                // 아래쪽 투명
-                        )
-                    )
-                )
-        )
-
         // 실제 화면 NavHost
         AppNavHost(navController)
     }

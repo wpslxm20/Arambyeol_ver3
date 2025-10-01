@@ -4,7 +4,6 @@ import com.arambyeol.domain.entity.Meal
 import com.arambyeol.domain.entity.MealType
 import com.arambyeol.domain.entity.Menu
 
-// data/dto/MenuDto.kt
 data class MenuDto(
     val menuId: Int,
     val menuName: String,
@@ -27,7 +26,6 @@ data class MenuDto(
     }
 }
 
-// data/dto/MenuPlanDto.kt
 data class MealDto(
     val date: String,
     val menusByMealType: Map<String, List<MenuDto>>

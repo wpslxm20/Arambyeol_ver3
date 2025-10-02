@@ -49,8 +49,8 @@ import com.arambyeol.ui.theme.Gray05
 import com.arambyeol.ui.theme.LightYellow
 
 @Composable
-fun DailyMealCard(meals: State<Meal?>, mealTime: MealType) {
-    meals.value?.let { meal ->
+fun DailyMealCard(meals: Meal, mealTime: MealType) {
+    meals.let { meal ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,20 +63,31 @@ fun DailyMealCard(meals: State<Meal?>, mealTime: MealType) {
                 }
             )
 
-            meal.menusByMealType[selectedMeal]?.let { menus ->
-                if (menus.isNotEmpty()) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier
-                            .padding(start = 30.dp, top = 5.dp, end = 30.dp)
-                            .height(480.dp)
-                    ) {
-                        items( menus.groupBy { it.course }.toList()) { (course, courseMenus) ->
-                            CourseCard(course, courseMenus)
-                        }
+            val menus = meal.menusByMealType[selectedMeal]
+            if (!menus.isNullOrEmpty()) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .height(480.dp)
+                        .padding(start = 30.dp, top = 5.dp, end = 30.dp)
+                ) {
+                    items( menus.groupBy { it.course }.toList()) { (course, courseMenus) ->
+                        CourseCard(course, courseMenus)
                     }
+                }
+            }
+            else {
+                Column(
+                    modifier = Modifier
+                        .height(480.dp)
+                        .padding(start = 30.dp, top = 5.dp, end = 30.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("메뉴가 없습니다.")
                 }
             }
 
@@ -97,9 +108,10 @@ fun MealTimeTabs(
     )
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 70.dp)
+            .padding(horizontal = 70.dp, vertical = 10.dp)
     ) {
         items.forEach { (mealType, title, iconRes) ->
             Row(

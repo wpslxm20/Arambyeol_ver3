@@ -1,20 +1,25 @@
 package com.arambyeol.todaymeal
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +38,7 @@ import com.arambyeol.core.ui.R
 import com.arambyeol.domain.entity.MealType
 import com.arambyeol.ui.component.DailyMealCard
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     composable("today_meal_screen") {
         val viewModel: TodayMealViewModel = hiltViewModel()
@@ -40,11 +46,12 @@ fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     }
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun TodayMealScreen(
     viewModel: TodayMealViewModel
 ) {
-    val meals = viewModel.todayMeals.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.loadTodayMeals()
@@ -52,10 +59,28 @@ fun TodayMealScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        TodayDateBox(viewModel.getTodayFormatted())
-        DailyMealCard(meals, MealType.BREAKFAST)
+        when (uiState) {
+            is TodayMealUIState.Loading -> {
+                // 아무 뷰도 없어도 됨
+            }
+            is TodayMealUIState.Empty -> {
+                Text(text = stringResource(R.string.error_not_found))
+            }
+            is TodayMealUIState.Error -> {
+                ErrorMessage(error = (uiState as TodayMealUIState.Error).message)
+            }
+            is TodayMealUIState.Success -> {
+                TodayDateBox(viewModel.getTodayFormatted())
+                DailyMealCard(
+                    meals = (uiState as TodayMealUIState.Success).meal,
+                    MealType.BREAKFAST
+                )
+            }
+        }
     }
 }
 
@@ -64,14 +89,17 @@ fun TodayDateBox(date: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 25.dp, top = 23.dp, end = 25.dp, bottom = 30.dp)
+            .padding(start = 25.dp, top = 23.dp, end = 25.dp, bottom = 10.dp)
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color.Gray.copy(alpha = 0.15f), Color.Gray.copy(alpha = 0.1f))
+                        colors = listOf(
+                            Color.Gray.copy(alpha = 0.15f),
+                            Color.Gray.copy(alpha = 0.1f)
+                        )
                     ),
                     shape = RoundedCornerShape(15.dp)
                 )
@@ -121,4 +149,16 @@ fun TodayDateBox(date: String) {
             }
         }
     }
+}
+
+@Composable
+fun ErrorMessage(error: MealError) {
+    val message = when (error) {
+        MealError.Network -> stringResource(R.string.error_network)
+        MealError.NotFound -> stringResource(R.string.error_not_found)
+        MealError.Server -> stringResource(R.string.error_server)
+        MealError.Timeout -> stringResource(R.string.error_timeout)
+        MealError.Unknown -> stringResource(R.string.error_unknown)
+    }
+    Text(text = message)
 }

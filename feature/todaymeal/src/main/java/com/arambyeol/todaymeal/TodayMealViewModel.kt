@@ -1,7 +1,10 @@
 package com.arambyeol.todaymeal
 
+import android.net.http.HttpEngine
+import android.net.http.HttpException
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arambyeol.domain.entity.Meal
@@ -12,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -21,17 +26,40 @@ import java.util.Locale
 class TodayMealViewModel @Inject constructor(
     private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) : ViewModel() {
-    private val _todayMeals = MutableStateFlow<Meal?>(null)
-    val todayMeals: StateFlow<Meal?> = _todayMeals
+    private val _uiState = MutableStateFlow<TodayMealUIState>(TodayMealUIState.Loading)
+    val uiState: StateFlow<TodayMealUIState> = _uiState
 
-    fun loadMeals(date: String) {
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    fun loadTodayMeals() {
+        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
         viewModelScope.launch {
-            _todayMeals.value = getMealsByDateUseCase(date)
+            _uiState.value = TodayMealUIState.Loading
+            try {
+                val meal = getMealsByDateUseCase(date)
+                if (meal.menusByMealType.isEmpty()) {
+                    _uiState.value = TodayMealUIState.Empty
+                } else {
+                    _uiState.value = TodayMealUIState.Success(meal)
+                }
+            } catch (e: IOException) {
+                _uiState.value = TodayMealUIState.Error(MealError.Network)
+            } catch (e: HttpException) {
+                _uiState.value = when (e.hashCode()) {
+                    404 -> TodayMealUIState.Error(MealError.NotFound)
+                    500 -> TodayMealUIState.Error(MealError.Server)
+                    else -> TodayMealUIState.Error(MealError.Unknown)
+                }
+            } catch (e: SocketTimeoutException) {
+                _uiState.value = TodayMealUIState.Error(MealError.Timeout)
+            } catch (e: Exception) {
+                _uiState.value = TodayMealUIState.Error(MealError.Unknown)
+            }
         }
     }
 
     fun loadDummyMeals() {
-        val dummyMeal = Meal(
+        val meal = Meal(
             date = "2025-09-09",
             menusByMealType = mapOf(
                 MealType.DINNER to listOf(
@@ -65,23 +93,25 @@ class TodayMealViewModel @Inject constructor(
                     Menu(196, "시리얼바", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
                     Menu(7, "모듬음료", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
                 ),
-                MealType.LUNCH to listOf(
-                    Menu(16, "쌀밥", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(25, "순두부찌개", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(186, "한식잡채", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(538, "부추겉절이", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(6, "배추김치", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(129, "망고주스", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                    Menu(417, "얼큰쌀국수", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
-                    Menu(864, "설탕꽈배기", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
-                    Menu(865, "삶은계란부추겉절이", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
-                    Menu(6, "배추김치", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
-                    Menu(129, "망고주스", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
-                    Menu(877, "할라피뇨크림미트볼", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
-                )
+//                MealType.LUNCH to listOf(
+//                    Menu(16, "쌀밥", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(25, "순두부찌개", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(186, "한식잡채", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(538, "부추겉절이", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(6, "배추김치", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(129, "망고주스", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                    Menu(417, "얼큰쌀국수", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
+//                    Menu(864, "설탕꽈배기", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
+//                    Menu(865, "삶은계란부추겉절이", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
+//                    Menu(6, "배추김치", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
+//                    Menu(129, "망고주스", MealType.LUNCH.name, "B코스/베이커리", "", 0.0, 0),
+//                    Menu(877, "할라피뇨크림미트볼", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+//                )
             )
         )
-        _todayMeals.value = dummyMeal
+
+//        _uiState.value = TodayMealUIState.Success(meal)
+        _uiState.value = TodayMealUIState.Empty
     }
 
     fun getTodayFormatted(

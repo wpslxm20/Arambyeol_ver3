@@ -1,5 +1,7 @@
 package com.arambyeol.arambyeol_ver3
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -7,20 +9,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.arambyeol.todaymeal.todayMealGraph
+import com.arambyeol.weeklymeal.weeklyMealGraph
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun AppNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "today_meal_screen"
     ) {
-        // 오늘의 식단 (실제 구현)
+        // 오늘의 식단
         todayMealGraph(navController)
 
-        // 주간 식단 (더미)
-        composable("weekly_meal_screen") {
-            Text("주간 식단 화면 (Dummy)")
-        }
+        // 주간 식단
+        weeklyMealGraph(navController)
 
         // 내 후기 (더미)
         composable("review_screen") {

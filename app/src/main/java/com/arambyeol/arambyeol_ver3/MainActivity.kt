@@ -1,9 +1,11 @@
 package com.arambyeol.arambyeol_ver3
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import com.arambyeol.ui.theme.TransparentYellow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,6 +56,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun AppNavHostWithTopTabBar() {
     val navController = rememberNavController()

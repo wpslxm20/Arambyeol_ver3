@@ -37,6 +37,9 @@ import com.arambyeol.ui.theme.TransparentYellow
 import com.arambyeol.core.ui.R
 import com.arambyeol.domain.entity.MealType
 import com.arambyeol.ui.component.DailyMealCard
+import com.arambyeol.ui.component.MealErrorMessage
+import com.arambyeol.ui.state.UiError
+import com.arambyeol.ui.state.UiState
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
@@ -63,22 +66,29 @@ fun TodayMealScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        when (uiState) {
-            is TodayMealUIState.Loading -> {
-                // 아무 뷰도 없어도 됨
-            }
-            is TodayMealUIState.Empty -> {
-                Text(text = stringResource(R.string.error_not_found))
-            }
-            is TodayMealUIState.Error -> {
-                ErrorMessage(error = (uiState as TodayMealUIState.Error).message)
-            }
-            is TodayMealUIState.Success -> {
-                TodayDateBox(viewModel.getTodayFormatted())
-                DailyMealCard(
-                    meals = (uiState as TodayMealUIState.Success).meal,
-                    MealType.BREAKFAST
-                )
+        TodayDateBox(viewModel.getTodayFormatted())
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            when (uiState) {
+                is UiState.Loading -> {
+                    // 아무 뷰도 없어도 됨
+                }
+                is UiState.Empty -> {
+                    Text(text = stringResource(R.string.error_not_found))
+                }
+                is UiState.Error -> {
+                    MealErrorMessage(error = (uiState as UiState.Error).message)
+                }
+                is UiState.Success -> {
+                    DailyMealCard(
+                        meals = (uiState as UiState.Success).data,
+                        MealType.BREAKFAST
+                    )
+                }
             }
         }
     }
@@ -118,6 +128,7 @@ fun TodayDateBox(date: String) {
         // 실제 콘텐츠
         Row(
             modifier = Modifier
+                .height(84.dp)
                 .padding(start = 27.dp, top = 20.dp, bottom = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -149,16 +160,4 @@ fun TodayDateBox(date: String) {
             }
         }
     }
-}
-
-@Composable
-fun ErrorMessage(error: MealError) {
-    val message = when (error) {
-        MealError.Network -> stringResource(R.string.error_network)
-        MealError.NotFound -> stringResource(R.string.error_not_found)
-        MealError.Server -> stringResource(R.string.error_server)
-        MealError.Timeout -> stringResource(R.string.error_timeout)
-        MealError.Unknown -> stringResource(R.string.error_unknown)
-    }
-    Text(text = message)
 }

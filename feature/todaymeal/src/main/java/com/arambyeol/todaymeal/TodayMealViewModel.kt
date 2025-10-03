@@ -11,6 +11,8 @@ import com.arambyeol.domain.entity.Meal
 import com.arambyeol.domain.entity.MealType
 import com.arambyeol.domain.entity.Menu
 import com.arambyeol.domain.usecase.GetMealsByDateUseCase
+import com.arambyeol.ui.state.UiError
+import com.arambyeol.ui.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,34 +28,35 @@ import java.util.Locale
 class TodayMealViewModel @Inject constructor(
     private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<TodayMealUIState>(TodayMealUIState.Loading)
-    val uiState: StateFlow<TodayMealUIState> = _uiState
+    private val _uiState = MutableStateFlow<UiState<Meal>>(UiState.Loading)
+    val uiState: StateFlow<UiState<Meal>> = _uiState
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun loadTodayMeals() {
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         viewModelScope.launch {
-            _uiState.value = TodayMealUIState.Loading
+            _uiState.value = UiState.Loading
             try {
                 val meal = getMealsByDateUseCase(date)
                 if (meal.menusByMealType.isEmpty()) {
-                    _uiState.value = TodayMealUIState.Empty
+                    _uiState.value = UiState.Empty
                 } else {
-                    _uiState.value = TodayMealUIState.Success(meal)
+                    _uiState.value = UiState.Success(meal)
                 }
             } catch (e: IOException) {
-                _uiState.value = TodayMealUIState.Error(MealError.Network)
+                _uiState.value = UiState.Error(UiError.Network)
             } catch (e: HttpException) {
                 _uiState.value = when (e.hashCode()) {
-                    404 -> TodayMealUIState.Error(MealError.NotFound)
-                    500 -> TodayMealUIState.Error(MealError.Server)
-                    else -> TodayMealUIState.Error(MealError.Unknown)
+                    400 -> UiState.Error(UiError.NotFound)
+                    404 -> UiState.Error(UiError.NotFound)
+                    500 -> UiState.Error(UiError.Server)
+                    else -> UiState.Error(UiError.Unknown)
                 }
             } catch (e: SocketTimeoutException) {
-                _uiState.value = TodayMealUIState.Error(MealError.Timeout)
+                _uiState.value = UiState.Error(UiError.Timeout)
             } catch (e: Exception) {
-                _uiState.value = TodayMealUIState.Error(MealError.Unknown)
+                _uiState.value = UiState.Error(UiError.Unknown)
             }
         }
     }
@@ -110,8 +113,8 @@ class TodayMealViewModel @Inject constructor(
             )
         )
 
-//        _uiState.value = TodayMealUIState.Success(meal)
-        _uiState.value = TodayMealUIState.Empty
+        _uiState.value = UiState.Success(meal)
+//        _uiState.value = UiState.Empty
     }
 
     fun getTodayFormatted(

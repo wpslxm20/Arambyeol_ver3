@@ -85,8 +85,7 @@ fun TodayMealScreen(
                 }
                 is UiState.Success -> {
                     DailyMealCard(
-                        meals = (uiState as UiState.Success).data,
-                        MealType.BREAKFAST
+                        meals = (uiState as UiState.Success).data
                     )
                 }
             }

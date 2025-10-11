@@ -96,10 +96,16 @@ fun WeeklyMealScreen(
                     MealErrorMessage(error = (uiState as UiState.Error).message)
                 }
                 is UiState.Success -> {
-//                    DailyMealCard(
-//                        meals = (uiState as UiState.Success).data,
-//                        MealType.BREAKFAST
-//                    )
+                    val weeklyMeals = (uiState as UiState.Success).data
+                    val selectedMeal = weeklyMeals.filter { it.date == selectedDate.toString() }
+
+                    if (selectedMeal.isNotEmpty()) {
+                        DailyMealCard(
+                            meals = selectedMeal.first()
+                        )
+                    } else {
+                        Text(text = stringResource(R.string.error_not_found))
+                    }
                 }
             }
         }

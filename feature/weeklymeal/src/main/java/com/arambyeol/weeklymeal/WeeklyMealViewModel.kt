@@ -1,5 +1,6 @@
 package com.arambyeol.weeklymeal
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.arambyeol.domain.entity.Meal
 import com.arambyeol.domain.entity.MealType
@@ -15,20 +16,27 @@ import javax.inject.Inject
 class WeeklyMealViewModel @Inject constructor(
 
 ): ViewModel() {
+    private val TAG = "WeeklyMealViewModel"
     private val _uiState = MutableStateFlow<UiState<List<Meal>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Meal>>> = _uiState
 
     private val _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
 
+    init {
+        loadDummyWeeklyMeals()
+
+    }
+
     fun onDateSelected(date: LocalDate) {
         _selectedDate.value = date
+        Log.d(TAG, selectedDate.value.toString())
     }
 
     fun loadDummyWeeklyMeals() {
         val mealList = listOf(
             Meal(
-                date = "2025-09-29",
+                date = "2025-10-06",
                 menusByMealType = mapOf(
                     MealType.DINNER to listOf(
                         Menu(16, "쌀밥", MealType.DINNER.name, "A코스/한식", "", 0.0, 0),
@@ -78,7 +86,7 @@ class WeeklyMealViewModel @Inject constructor(
                 )
             ),
             Meal(
-                date = "2025-09-30",
+                date = "2025-10-07",
                 menusByMealType = mapOf(
                     MealType.DINNER to listOf(
                         Menu(16, "쌀밥", MealType.DINNER.name, "A코스/한식", "", 0.0, 0),
@@ -125,7 +133,7 @@ class WeeklyMealViewModel @Inject constructor(
                 )
             ),
             Meal(
-                date = "2025-10-01",
+                date = "2025-10-08",
                 menusByMealType = mapOf(
                     MealType.DINNER to listOf(
                         Menu(16, "쌀밥", MealType.DINNER.name, "A코스/한식", "", 0.0, 0),
@@ -177,7 +185,133 @@ class WeeklyMealViewModel @Inject constructor(
                 )
             ),
             Meal(
-                date = "2025-10-02",
+                date = "2025-10-09",
+                menusByMealType = mapOf(
+                    MealType.BREAKFAST to listOf(
+                        Menu(1, "쌀밥 / 누룽지", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(2, "감자맑은국", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(168, "돼지고기장조림", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(191, "플레인베이글*버터", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(172, "시리얼", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(630, "할라피뇨샐러드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(211, "소고기야채죽", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(64, "샌드위치", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(196, "시리얼바", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(943, "마늘쫑볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0)
+                    ),
+                    MealType.LUNCH to listOf(
+                        Menu(16, "쌀밥", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(138, "육개장", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(487, "베이컨두부조림", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(259, "봉어묵콩나물찜", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(223, "그린빈스알마늘볶음", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(952, "불맛짜장덮밥*계란후라이", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(421, "야채춘권*칠리S", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(619, "샐러드", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(478, "유부장국", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0)
+                    )
+                )
+            ),
+            Meal(
+                date = "2025-10-10",
+                menusByMealType = mapOf(
+                    MealType.BREAKFAST to listOf(
+                        Menu(1, "쌀밥 / 누룽지", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(2, "감자맑은국", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(168, "돼지고기장조림", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(191, "플레인베이글*버터", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(172, "시리얼", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(630, "할라피뇨샐러드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(211, "소고기야채죽", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(64, "샌드위치", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(196, "시리얼바", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(943, "마늘쫑볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0)
+                    ),
+                    MealType.LUNCH to listOf(
+                        Menu(16, "쌀밥", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(138, "육개장", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(487, "베이컨두부조림", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(259, "봉어묵콩나물찜", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(223, "그린빈스알마늘볶음", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(952, "불맛짜장덮밥*계란후라이", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(421, "야채춘권*칠리S", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(619, "샐러드", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(478, "유부장국", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0)
+                    )
+                )
+            ),
+            Meal(
+                date = "2025-10-11",
+                menusByMealType = mapOf(
+                    MealType.BREAKFAST to listOf(
+                        Menu(1, "쌀밥 / 누룽지", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(2, "감자맑은국", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(168, "돼지고기장조림", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),
+                        Menu(191, "플레인베이글*버터", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(172, "시리얼", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(630, "할라피뇨샐러드", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "B코스/베이커리", "", 0.0, 0),
+                        Menu(211, "소고기야채죽", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(733, "치킨너겟*머스타드", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(33, "미역줄기볶음", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "C코스/죽식", "", 0.0, 0),
+                        Menu(64, "샌드위치", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(196, "시리얼바", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(7, "모듬음료", MealType.BREAKFAST.name, "테이크아웃", "", 0.0, 0),
+                        Menu(943, "마늘쫑볶음", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0)
+                    ),
+                    MealType.LUNCH to listOf(
+                        Menu(16, "쌀밥", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(138, "육개장", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(487, "베이컨두부조림", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(259, "봉어묵콩나물찜", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(223, "그린빈스알마늘볶음", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(952, "불맛짜장덮밥*계란후라이", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(421, "야채춘권*칠리S", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(619, "샐러드", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(478, "유부장국", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(6, "배추김치", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "A코스/한식", "", 0.0, 0),
+                        Menu(321, "아이스홍시", MealType.LUNCH.name, "B코스/일품", "", 0.0, 0)
+                    )
+                )
+            ),
+            Meal(
+                date = "2025-10-12",
                 menusByMealType = mapOf(
                     MealType.BREAKFAST to listOf(
                         Menu(1, "쌀밥 / 누룽지", MealType.BREAKFAST.name, "A코스/한식", "", 0.0, 0),

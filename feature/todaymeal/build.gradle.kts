@@ -51,5 +51,4 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.hilt)
     ksp(libs.hilt.compiler)
-
 }

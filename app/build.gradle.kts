@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":core:ui"))
     implementation(project(":feature:todaymeal"))
+    implementation(project(":feature:weeklymeal"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

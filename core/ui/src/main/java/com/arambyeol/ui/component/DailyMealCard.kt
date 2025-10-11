@@ -49,13 +49,13 @@ import com.arambyeol.ui.theme.Gray05
 import com.arambyeol.ui.theme.LightYellow
 
 @Composable
-fun DailyMealCard(meals: Meal, mealTime: MealType) {
+fun DailyMealCard(meals: Meal) {
     meals.let { meal ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            var selectedMeal by remember { mutableStateOf(mealTime) }
+            var selectedMeal by remember { mutableStateOf(MealType.BREAKFAST) }
             MealTimeTabs(
                 selectedMeal = selectedMeal,
                 onMealSelected = { meal ->

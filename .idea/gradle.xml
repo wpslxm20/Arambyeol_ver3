@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/todaymeal" />
+            <option value="$PROJECT_DIR$/feature/weeklymeal" />
             <option value="$PROJECT_DIR$/presentation" />
           </set>
         </option>

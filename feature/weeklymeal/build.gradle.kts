@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.arambyeol.presentation"
+    namespace = "com.arambyeol.weeklymeal"
     compileSdk = 35
 
     defaultConfig {
@@ -33,9 +33,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.6.0"
     }
@@ -43,8 +40,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":feature:todaymeal"))
-    implementation(project(":feature:weeklymeal"))
+    implementation(project(":core:ui"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

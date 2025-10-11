@@ -38,3 +38,7 @@ data class MealDto(
         )
     }
 }
+
+fun List<MealDto>.toEntity(): List<Meal> {
+    return this.map { it.toEntity() }
+}

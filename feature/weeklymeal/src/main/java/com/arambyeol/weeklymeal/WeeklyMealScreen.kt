@@ -65,10 +65,6 @@ fun WeeklyMealScreen(
     val uiState by viewModel.uiState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
 
-    LaunchedEffect(true) {
-        viewModel.loadDummyWeeklyMeals()
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize(),

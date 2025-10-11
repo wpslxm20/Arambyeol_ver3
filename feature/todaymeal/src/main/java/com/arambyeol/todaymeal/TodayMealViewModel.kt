@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arambyeol.domain.common.DomainError
+import com.arambyeol.domain.common.Result
 import com.arambyeol.domain.entity.Meal
 import com.arambyeol.domain.entity.MealType
 import com.arambyeol.domain.entity.Menu
@@ -31,32 +33,34 @@ class TodayMealViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<Meal>>(UiState.Loading)
     val uiState: StateFlow<UiState<Meal>> = _uiState
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    fun loadTodayMeals() {
+    init {
+        loadTodayMeals()
+    }
+
+    private fun loadTodayMeals() {
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            try {
-                val meal = getMealsByDateUseCase(date)
-                if (meal.menusByMealType.isEmpty()) {
-                    _uiState.value = UiState.Empty
-                } else {
-                    _uiState.value = UiState.Success(meal)
+
+            when (val result = getMealsByDateUseCase(date)) {
+                is Result.Success -> {
+                    val meal = result.data
+                    _uiState.value = if (meal.menusByMealType.isEmpty())
+                        UiState.Empty
+                    else
+                        UiState.Success(meal)
                 }
-            } catch (e: IOException) {
-                _uiState.value = UiState.Error(UiError.Network)
-            } catch (e: HttpException) {
-                _uiState.value = when (e.hashCode()) {
-                    400 -> UiState.Error(UiError.NotFound)
-                    404 -> UiState.Error(UiError.NotFound)
-                    500 -> UiState.Error(UiError.Server)
-                    else -> UiState.Error(UiError.Unknown)
+                is Result.Failure -> {
+                    val uiError = when (result.error) {
+                        DomainError.Network -> UiError.Network
+                        DomainError.NotFound -> UiError.NotFound
+                        DomainError.Server -> UiError.Server
+                        DomainError.Timeout -> UiError.Timeout
+                        DomainError.Unknown -> UiError.Unknown
+                    }
+                    _uiState.value = UiState.Error(uiError)
                 }
-            } catch (e: SocketTimeoutException) {
-                _uiState.value = UiState.Error(UiError.Timeout)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(UiError.Unknown)
             }
         }
     }

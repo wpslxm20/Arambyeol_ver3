@@ -41,7 +41,6 @@ import com.arambyeol.ui.component.MealErrorMessage
 import com.arambyeol.ui.state.UiError
 import com.arambyeol.ui.state.UiState
 
-@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     composable("today_meal_screen") {
         val viewModel: TodayMealViewModel = hiltViewModel()
@@ -49,16 +48,11 @@ fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     }
 }
 
-@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun TodayMealScreen(
     viewModel: TodayMealViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(true) {
-        viewModel.loadTodayMeals()
-    }
 
     Column(
         modifier = Modifier

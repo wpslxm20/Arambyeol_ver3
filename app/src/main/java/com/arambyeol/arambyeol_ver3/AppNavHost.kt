@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import com.arambyeol.todaymeal.todayMealGraph
 import com.arambyeol.weeklymeal.weeklyMealGraph
 
-@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun AppNavHost(navController: NavHostController) {
     NavHost(

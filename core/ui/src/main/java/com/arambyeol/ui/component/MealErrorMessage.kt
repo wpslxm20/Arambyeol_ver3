@@ -14,7 +14,6 @@ fun MealErrorMessage(error: UiError) {
         UiError.Server -> stringResource(R.string.error_server)
         UiError.Timeout -> stringResource(R.string.error_timeout)
         UiError.Unknown -> stringResource(R.string.error_unknown)
-        UiError.BadRequest -> TODO()
     }
     Text(text = message)
 }

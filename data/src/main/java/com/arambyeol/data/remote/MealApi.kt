@@ -9,4 +9,9 @@ interface MealApi {
     suspend fun getMealsByDate(
         @Path("date") date: String
     ): MealDto
+
+    @GET("/plans/weekly/{date}")
+    suspend fun getWeeklyMealsByDate(
+        @Path("date") date: String
+    ): List<MealDto>
 }

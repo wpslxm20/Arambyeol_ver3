@@ -2,6 +2,7 @@ package com.arambyeol.data.di
 
 import com.arambyeol.domain.repository.MealRepository
 import com.arambyeol.domain.usecase.GetMealsByDateUseCase
+import com.arambyeol.domain.usecase.GetWeeklyMealsByDateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +17,10 @@ object DomainModule {
     fun provideGetMealsByDateUseCase(
         mealRepository: MealRepository
     ): GetMealsByDateUseCase = GetMealsByDateUseCase(mealRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetWeeklyMealsByDateUseCase(
+        mealRepository: MealRepository
+    ): GetWeeklyMealsByDateUseCase = GetWeeklyMealsByDateUseCase(mealRepository)
 }

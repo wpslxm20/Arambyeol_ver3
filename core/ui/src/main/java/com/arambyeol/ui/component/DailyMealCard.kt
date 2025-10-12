@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -53,44 +55,52 @@ fun DailyMealCard(meals: Meal) {
     meals.let { meal ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             var selectedMeal by remember { mutableStateOf(MealType.BREAKFAST) }
-            MealTimeTabs(
-                selectedMeal = selectedMeal,
-                onMealSelected = { meal ->
-                    selectedMeal = meal
-                }
-            )
 
-            val menus = meal.menusByMealType[selectedMeal]
-            if (!menus.isNullOrEmpty()) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .height(480.dp)
-                        .padding(start = 30.dp, top = 5.dp, end = 30.dp)
-                ) {
-                    items( menus.groupBy { it.course }.toList()) { (course, courseMenus) ->
-                        CourseCard(course, courseMenus)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Top
+            ) {
+                MealTimeTabs(
+                    selectedMeal = selectedMeal,
+                    onMealSelected = { meal ->
+                        selectedMeal = meal
+                    }
+                )
+
+                val menus = meal.menusByMealType[selectedMeal]
+                if (!menus.isNullOrEmpty()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .height(480.dp)
+                            .padding(start = 30.dp, top = 5.dp, end = 30.dp)
+                    ) {
+                        items( menus.groupBy { it.course }.toList()) { (course, courseMenus) ->
+                            CourseCard(course, courseMenus)
+                        }
+                    }
+                }
+                else {
+                    Column(
+                        modifier = Modifier
+                            .height(480.dp)
+                            .padding(start = 30.dp, top = 5.dp, end = 30.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("메뉴가 없습니다.")
                     }
                 }
             }
-            else {
-                Column(
-                    modifier = Modifier
-                        .height(480.dp)
-                        .padding(start = 30.dp, top = 5.dp, end = 30.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("메뉴가 없습니다.")
-                }
-            }
-
             CurrentOperatingHourText(selectedMeal)
         }
     }
@@ -169,11 +179,12 @@ fun CurrentOperatingHourText(mealTime: MealType) {
 @Composable
 fun CourseCard(course: String, menus: List<Menu>) {
     Column(
-        modifier = Modifier
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
-                .width(163.dp)
+                .fillMaxWidth()
                 .height(230.dp)
                 .border(
                     width = 1.dp,

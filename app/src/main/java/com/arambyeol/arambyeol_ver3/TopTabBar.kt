@@ -2,6 +2,7 @@ package com.arambyeol.arambyeol_ver3
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,7 @@ fun TopTabBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 12.dp, top = 13.dp, end = 12.dp, bottom = 15.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
         tabs.forEachIndexed { index, tab ->
             val isSelected = selectedIndex == index
@@ -41,8 +42,11 @@ fun TopTabBar(
                         color = if (isSelected) DarkYellow else Color.Transparent,
                         shape = RoundedCornerShape(50)
                     )
-                    .padding(horizontal = 12.dp, vertical = 3.dp)
-                    .clickable { onTapSelected(index) }
+                    .padding(horizontal = 10.dp, vertical = 3.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onTapSelected(index) }
             )
         }
     }

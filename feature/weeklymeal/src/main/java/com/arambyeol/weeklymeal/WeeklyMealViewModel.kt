@@ -23,7 +23,6 @@ import javax.inject.Inject
 class WeeklyMealViewModel @Inject constructor(
     private val getWeeklyMealsByDateUseCase: GetWeeklyMealsByDateUseCase
 ): ViewModel() {
-    private val TAG = "WeeklyMealViewModel"
     private val _uiState = MutableStateFlow<UiState<List<Meal>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Meal>>> = _uiState
 

@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.arambyeol.ui.theme.TransparentYellow
@@ -62,8 +63,7 @@ fun AppNavHostWithTopTabBar() {
 
     Column {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             AppHeader()
             TopTabBar(
@@ -81,7 +81,18 @@ fun AppNavHostWithTopTabBar() {
                 }
             )
         }
+
         // 실제 화면 NavHost
         AppNavHost(navController)
+    }
+}
+
+@Preview(name = "Small Phone", widthDp = 320, heightDp = 640, showBackground = true)
+@Preview(name = "Normal Phone", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Large Phone", widthDp = 411, heightDp = 900, showBackground = true)
+@Composable
+fun AppNavHostWithTopTabBarPreview() {
+    Arambyeol_ver3Theme {
+        AppNavHostWithTopTabBar()
     }
 }

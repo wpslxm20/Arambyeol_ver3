@@ -3,6 +3,8 @@ package com.arambyeol.todaymeal
 import android.os.Build
 import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -58,14 +62,14 @@ fun TodayMealScreen(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         TodayDateBox(viewModel.getTodayFormatted())
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceAround
         ) {
             when (uiState) {
                 is UiState.Loading -> {
@@ -144,11 +148,13 @@ fun TodayDateBox(date: String) {
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
+                    lineHeight = 14.sp
                 )
                 Text(
                     text = date,
                     color = Color.Black,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    lineHeight = 14.sp
                 )
             }
         }

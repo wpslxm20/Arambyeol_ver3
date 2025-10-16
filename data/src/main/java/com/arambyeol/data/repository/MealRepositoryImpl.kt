@@ -1,6 +1,7 @@
 package com.arambyeol.data.repository
 
 import android.os.Build
+import android.util.Log
 import com.arambyeol.data.dto.toEntity
 import com.arambyeol.data.remote.MealApi
 import com.arambyeol.domain.entity.Meal
@@ -27,10 +28,12 @@ class MealRepositoryImpl @Inject constructor(
                 500 -> DomainError.Server
                 else -> DomainError.Unknown
             }
+            Log.e("getMealsByDate", e.toString())
             Result.Failure(error)
         } catch (e: SocketTimeoutException) {
             Result.Failure(DomainError.Timeout)
         } catch (e: Exception) {
+            Log.e("getMealsByDate", e.toString())
             Result.Failure(DomainError.Unknown)
         }
     }

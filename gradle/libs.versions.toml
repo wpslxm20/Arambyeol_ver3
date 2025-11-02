@@ -17,6 +17,9 @@ ksp = "2.1.20-2.0.0"
 retrofit = "2.9.0"
 okhttp = "4.11.0"
 converterGson = "2.9.0"
+glance = "1.0.0-alpha08"
+workManager = "2.8.1"
+kotlinxCoroutinesAndroid = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +45,10 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+glance = { group = "androidx.glance", name = "glance", version.ref = "glance" }
+work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -58,6 +65,7 @@ compose = ["androidx-activity-compose","androidx-compose-bom","androidx-ui",
     "androidx-ui-test-manifest","androidx-ui-test-junit4","androidx-material3"]
 hilt = ["hilt-android","hilt-navigation-compose"]
 network = ["retrofit","retrofit-gson","okhttp","logging-interceptor"]
+widget = ["glance","work-runtime-ktx","kotlinx-coroutines-android"]
 
 
 

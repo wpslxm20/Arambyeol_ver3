@@ -55,14 +55,14 @@ import java.time.LocalDate
 
 fun NavGraphBuilder.weeklyMealGraph(navController: NavController) {
     composable("weekly_meal_screen") {
-        val viewModel: WeeklyMealViewModel = hiltViewModel()
-        WeeklyMealScreen(viewModel)
+//        val viewModel: WeeklyMealViewModel = hiltViewModel()
+        WeeklyMealScreen()
     }
 }
 
 @Composable
 fun WeeklyMealScreen(
-    viewModel: WeeklyMealViewModel
+    viewModel: WeeklyMealViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()

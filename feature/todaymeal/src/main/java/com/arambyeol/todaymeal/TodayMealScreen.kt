@@ -47,14 +47,14 @@ import com.arambyeol.ui.state.UiState
 
 fun NavGraphBuilder.todayMealGraph(navController: NavController) {
     composable("today_meal_screen") {
-        val viewModel: TodayMealViewModel = hiltViewModel()
-        TodayMealScreen(viewModel)
+//        val viewModel: TodayMealViewModel = hiltViewModel()
+        TodayMealScreen()
     }
 }
 
 @Composable
 fun TodayMealScreen(
-    viewModel: TodayMealViewModel
+    viewModel: TodayMealViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

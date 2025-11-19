@@ -19,3 +19,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# ------------------------------
+# Feature 모듈에서 Gson 모델 클래스 사용 시 보존
+# ------------------------------
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.arambyeol.feature.**.model.** { *; }
+
+# Compose 관련
+-keep class androidx.compose.** { *; }
+-keep class androidx.lifecycle.** { *; }
+
+# Hilt
+-keep class dagger.** { *; }
+-keep class javax.inject.** { *; }
